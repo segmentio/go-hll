@@ -1,0 +1,40 @@
+version: 2
+jobs:
+  build:
+    working_directory: /go/src/github.com/segmentio/go-hll
+    docker:
+      - image: segment/circleci-golang:1.11.0
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: deps-{{ `{{ checksum "Gopkg.lock" }}` }}
+
+      - setup_remote_docker:
+          reusable: true
+
+      - run:
+          name: Dependencies
+          command: |
+            make dep
+
+      - run:
+          name: Test
+          command: |
+            make test
+
+      - run:
+          name: Snyk Setup
+          command: curl -sL https://raw.githubusercontent.com/segmentio/snyk_helpers/master/initialization/snyk.sh | sh
+
+      - save_cache:
+          key: deps-{{ `{{ checksum "Gopkg.lock" }}` }}
+          paths:
+            - vendor/
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build:
+          context: snyk
