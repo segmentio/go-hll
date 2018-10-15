@@ -88,6 +88,19 @@ func Test_ToFromBytes_Dense(t *testing.T) {
 	}
 }
 
+func Test_ToFromBytes_Dense_Trailing(t *testing.T) {
+	// ensure coverage on the code where the number of bits in the HLL is not
+	// evenly divisible by 64
+	hll, _ := NewHll(Settings{Log2m: 4, Regwidth: 3})
+	for i := 0; i < 16; i++ {
+		hll.AddRaw(constructHllValue(int(hll.settings.log2m), i, i+1))
+	}
+	bytes := hll.ToBytes()
+	require.True(t, len(bytes)%8 != 0)
+	hll2, _ := FromBytes(bytes)
+	assert.Equal(t, hll.storage, hll2.storage)
+}
+
 func Test_DenseRegisters(t *testing.T) {
 
 	tests := []struct {
