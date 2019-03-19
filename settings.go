@@ -130,22 +130,20 @@ type settings struct {
 // This function will also compute and populate auto-generated thresholds and
 // constant values used by the Hll calculations and cache the result.
 func (s Settings) toInternal() (*settings, error) {
-
 	if err := s.validate(); err != nil {
 		return nil, err
 	}
 
+	settingsCacheLock.RLock()
+	cachedSettings := settingsCache[s]
+	settingsCacheLock.RUnlock()
+
+	if cachedSettings != nil {
+		return cachedSettings, nil
+	}
+
 	log2m := s.Log2m
 	regwidth := s.Regwidth
-
-	// try to get the settings
-	if settings := func() *settings {
-		settingsCacheLock.RLock()
-		defer settingsCacheLock.RUnlock()
-		return settingsCache[s]
-	}(); settings != nil {
-		return settings, nil
-	}
 
 	var explicitThreshold int
 	explicitAuto := s.ExplicitThreshold == AutoExplicitThreshold
