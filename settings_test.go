@@ -136,3 +136,14 @@ func resetDefaults() {
 	defaultSettings = nil
 	defaultSettingsLock.Unlock()
 }
+
+func BenchmarkSettingsToInternal(b *testing.B) {
+	s := Settings{
+		Log2m:    11,
+		Regwidth: 5,
+	}
+
+	for i := 0; i < b.N; i++ {
+		s.toInternal()
+	}
+}
