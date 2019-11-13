@@ -1,8 +1,5 @@
 
-dep:
-	@dep ensure
-
 test: dep
-	@go test -cover ./...
+	@GO111MODULE=on go test -cover ./...
 
 .PHONY: dep test
