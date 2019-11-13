@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: /go/src/github.com/segmentio/go-hll
     docker:
-      - image: segment/circleci-golang:1.11.0
+      - image: segment/circleci-golang:1.12.0
     steps:
       - checkout
 

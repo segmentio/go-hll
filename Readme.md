@@ -45,11 +45,8 @@ However, doing so can produce wildly inaccurate results.  This library provides 
 that will return an error if attempting a union on HLLs with incompatible settings.
 
 ## Building
-Dependencies are managed with [dep](https://github.com/golang/dep).  Before building, ensure that dep is 
-[installed](https://github.com/golang/dep) and on the path.
-
-### Download Dependencies
-```make dep```
+Dependencies are managed with [Go Modules](https://blog.golang.org/using-go-modules).  Accordingly, this project
+requires Go version 1.12 or later.
 
 ### Test
 ```make test```
