@@ -1,4 +1,4 @@
-# go-hll  [![CircleCI](https://circleci.com/gh/segmentio/go-hll.svg?style=shield)](https://circleci.com/gh/segmentio/go-hll) [![Go Report Card](https://goreportcard.com/badge/github.com/segmentio/go-hll)](https://goreportcard.com/report/github.com/segmentio/go-hll) [![GoDoc](https://godoc.org/github.com/segmentio/go-hll?status.svg)](https://godoc.org/github.com/segmentio/go-hll)
+# go-hll ![Build and Test](https://github.com/segmentio/go-hll/actions/workflows/build-and-test.yml/badge.svg) [![Go Report Card](https://goreportcard.com/badge/github.com/segmentio/go-hll)](https://goreportcard.com/report/github.com/segmentio/go-hll) [![GoDoc](https://godoc.org/github.com/segmentio/go-hll?status.svg)](https://godoc.org/github.com/segmentio/go-hll)
 
 A Go implementation of [HyperLogLog](http://algo.inria.fr/flajolet/Publications/FlFuGaMe07.pdf) that is
 storage-compatible with the [Aggregate Knowledge HLL Storage Spec](https://github.com/aggregateknowledge/hll-storage-spec).
