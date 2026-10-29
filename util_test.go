@@ -28,11 +28,11 @@ func Test_readWriteBits(t *testing.T) {
 		// test from i = 0 to i = 1000...makes sure handling of lower bits is correct.
 		t.Run(fmt.Sprintf("Ascending-%d", nBits), func(t *testing.T) {
 			bytes := make([]byte, divideBy8RoundUp(nBits*numSamples))
-			for i := 0; i < numSamples; i++ {
+			for i := range numSamples {
 				writeBits(bytes, i*nBits, uint64(i), nBits)
 			}
 
-			for i := 0; i < numSamples; i++ {
+			for i := range numSamples {
 				assert.Equal(t, uint64(i)&mask, readBits(bytes, i*nBits, nBits), "i == %d", i)
 			}
 		})
@@ -40,11 +40,11 @@ func Test_readWriteBits(t *testing.T) {
 		// test from i = MAX to i = MAX - 1000...makes sure handling of upper bits is correct
 		t.Run(fmt.Sprintf("Descending-%d", nBits), func(t *testing.T) {
 			bytes := make([]byte, divideBy8RoundUp(nBits*numSamples))
-			for i := 0; i < numSamples; i++ {
+			for i := range numSamples {
 				writeBits(bytes, i*nBits, math.MaxUint64-uint64(i), nBits)
 			}
 
-			for i := 0; i < numSamples; i++ {
+			for i := range numSamples {
 				assert.Equal(t, (math.MaxInt64-uint64(i))&mask, readBits(bytes, i*nBits, nBits), "i == %d", i)
 			}
 		})

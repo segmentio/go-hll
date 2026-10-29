@@ -2,6 +2,7 @@ package hll
 
 import (
 	"encoding/binary"
+	"slices"
 )
 
 // denseStorage is essentially a bit vector composed of uint64 words.  It is
@@ -39,7 +40,7 @@ func (s denseStorage) writeBytes(settings *settings, bytes []byte) {
 
 	byteOffset := 0
 	nWords := cap(bytes) / 8
-	for i := 0; i < nWords; i++ {
+	for i := range nWords {
 		binary.BigEndian.PutUint64(bytes[byteOffset:], s[i])
 		byteOffset += 8
 	}
@@ -49,7 +50,7 @@ func (s denseStorage) writeBytes(settings *settings, bytes []byte) {
 	remainder := cap(bytes) % 8
 	if remainder > 0 {
 		lastWord := s[nWords]
-		for i := 0; i < remainder; i++ {
+		for i := range remainder {
 			bytes[byteOffset+i] = byte(lastWord >> uint(64-(8*(i+1))))
 		}
 	}
@@ -66,7 +67,7 @@ func (s denseStorage) fromBytes(settings *settings, bytes []byte) error {
 	n := len(bytes)
 	nWords := n / 8
 
-	for i := 0; i < nWords; i++ {
+	for i := range nWords {
 		offset := i * 8
 		s[i] = binary.BigEndian.Uint64(bytes[offset : offset+8])
 	}
@@ -77,7 +78,7 @@ func (s denseStorage) fromBytes(settings *settings, bytes []byte) error {
 	if remainder > 0 {
 		lastValue := uint64(0)
 
-		for i := 0; i < remainder; i++ {
+		for i := range remainder {
 			shiftAmount := uint(64 - (8 * (i + 1)))
 			lastValue |= uint64(bytes[n-(remainder-i)]) << shiftAmount
 		}
@@ -89,9 +90,7 @@ func (s denseStorage) fromBytes(settings *settings, bytes []byte) error {
 }
 
 func (s denseStorage) copy() storage {
-	o := make(denseStorage, len(s))
-	copy(o, s)
-	return o
+	return slices.Clone(s)
 }
 
 func (s denseStorage) indicator(settings *settings) (float64, int) {
@@ -106,7 +105,7 @@ func (s denseStorage) indicator(settings *settings) (float64, int) {
 	sum := float64(0)
 	numberOfZeros := 0
 
-	for i := 0; i < numReg; i++ {
+	for range numReg {
 
 		var value uint64
 
@@ -214,7 +213,7 @@ func (s denseStorage) union(settings *settings, other denseStorage) {
 
 	mask := settings.mBitsMask << uint(64-settings.regwidth)
 
-	for i := 0; i < numReg; i++ {
+	for range numReg {
 
 		bitsAvailable := 64 - pos
 

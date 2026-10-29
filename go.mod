@@ -1,6 +1,6 @@
 module github.com/segmentio/go-hll
 
-go 1.17
+go 1.24
 
 require (
 	github.com/pkg/errors v0.8.0

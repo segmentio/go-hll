@@ -1,6 +1,9 @@
 package hll
 
-import "sort"
+import (
+	"maps"
+	"slices"
+)
 
 type sparseStorage map[int32]byte
 
@@ -21,7 +24,7 @@ func (s sparseStorage) writeBytes(settings *settings, bytes []byte) {
 	for reg := range s {
 		sortedRegisters = append(sortedRegisters, int32(reg))
 	}
-	sort.Slice(sortedRegisters, func(i, j int) bool { return sortedRegisters[i] < sortedRegisters[j] })
+	slices.Sort(sortedRegisters)
 
 	addr := 0
 	bitsPerRegister := int(settings.log2m + settings.regwidth)
@@ -40,7 +43,7 @@ func (s sparseStorage) fromBytes(settings *settings, bytes []byte) error {
 	// take the floor of the number of bits divided by the width of the regnum + width
 	numRegisters := (8 * len(bytes)) / bitsPerRegister
 
-	for i := 0; i < numRegisters; i++ {
+	for i := range numRegisters {
 		regAndVal := readBits(bytes, i*bitsPerRegister, bitsPerRegister)
 		s[int32(regAndVal>>uint(settings.regwidth))] = byte(regAndVal) & regMask
 	}
@@ -49,12 +52,7 @@ func (s sparseStorage) fromBytes(settings *settings, bytes []byte) error {
 }
 
 func (s sparseStorage) copy() storage {
-	o := make(sparseStorage)
-	for k, v := range s {
-		o[k] = v
-	}
-
-	return o
+	return maps.Clone(s)
 }
 
 func (s sparseStorage) setIfGreater(settings *settings, regnum int, value byte) {

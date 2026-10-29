@@ -203,7 +203,7 @@ func Test_ToFromBytes_Sparse(t *testing.T) {
 		hll, err := NewHll(sparseTestSettings)
 		require.NoError(t, err)
 
-		for i := 0; i < 3; i++ {
+		for i := range 3 {
 			hll.AddRaw(constructHllValue(sparseTestSettings.Log2m, i, i+9))
 		}
 
@@ -246,7 +246,7 @@ func Test_RandomValues_Sparse(t *testing.T) {
 	seed := 1 // makes for reproducible tests.
 	r := rand.NewSource(int64(seed))
 
-	for run := 0; run < 100; run++ {
+	for run := range 100 {
 		t.Run(fmt.Sprint("run ", run), func(t *testing.T) {
 			hll, err := NewHll(sparseTestSettings)
 			require.NoError(t, err)

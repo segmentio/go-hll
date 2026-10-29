@@ -67,7 +67,7 @@ func Test_normalRangeSmokeTest(t *testing.T) {
 		require.NoError(t, err)
 
 		registerValue := 7 /*chosen to ensure neither correction kicks in*/
-		for i := 0; i < m; i++ {
+		for i := range m {
 			hll.AddRaw(constructHllValue(sparseTestSettings.Log2m, i, registerValue))
 		}
 		assertDense(t, hll)
@@ -100,7 +100,7 @@ func Test_largeRangeSmokeTest(t *testing.T) {
 		// NOTE : java test uses 31 here, but that is too large and results in
 		//        NaN for cardinality calculation (PG agrees)
 		registerValue := 28 /*chosen to ensure large correction kicks in*/
-		for i := 0; i < m; i++ {
+		for i := range m {
 			hll.AddRaw(constructHllValue(sparseTestSettings.Log2m, i, registerValue))
 		}
 		assertDense(t, hll)

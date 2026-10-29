@@ -21,7 +21,7 @@ func Test_ClearDense(t *testing.T) {
 	assert.NoError(t, err)
 
 	hll.storage = newDenseStorage(hll.settings) // force upgrade for the test.
-	for i := 0; i < 100; i++ {
+	for i := range 100 {
 		hll.AddRaw(uint64(i))
 	}
 
@@ -54,7 +54,7 @@ func Test_ToFromBytes_Dense(t *testing.T) {
 		hll, err := NewHll(denseTestSettings)
 		assert.NoError(t, err)
 
-		for i := 0; i < 3; i++ {
+		for i := range 3 {
 			hll.AddRaw(constructHllValue(int(hll.settings.log2m), i, i+9))
 		}
 		bytes := hll.ToBytes()
@@ -92,7 +92,7 @@ func Test_ToFromBytes_Dense_Trailing(t *testing.T) {
 	// ensure coverage on the code where the number of bits in the HLL is not
 	// evenly divisible by 64
 	hll, _ := NewHll(Settings{Log2m: 4, Regwidth: 3})
-	for i := 0; i < 16; i++ {
+	for i := range 16 {
 		hll.AddRaw(constructHllValue(int(hll.settings.log2m), i, i+1))
 	}
 	bytes := hll.ToBytes()

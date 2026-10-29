@@ -2,7 +2,8 @@ package hll
 
 import (
 	"encoding/binary"
-	"sort"
+	"maps"
+	"slices"
 )
 
 // explicitStorage is the observed set of raw values.
@@ -29,7 +30,7 @@ func (s explicitStorage) writeBytes(settings *settings, bytes []byte) {
 		sortedValues = append(sortedValues, int64(value))
 	}
 
-	sort.Slice(sortedValues, func(i, j int) bool { return sortedValues[i] < sortedValues[j] })
+	slices.Sort(sortedValues)
 
 	for i, value := range sortedValues {
 		pos := i * 8
@@ -59,10 +60,5 @@ func (s explicitStorage) fromBytes(settings *settings, bytes []byte) error {
 }
 
 func (s explicitStorage) copy() storage {
-	o := make(explicitStorage)
-	for k, v := range s {
-		o[k] = v
-	}
-
-	return o
+	return maps.Clone(s)
 }

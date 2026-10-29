@@ -21,10 +21,7 @@ func readBits(bytes []byte, addr int, nBits int) uint64 {
 	bitsRequired := nBits
 	for bitsRequired > 0 {
 
-		bitsAvailable := 8 - pos
-		if bitsAvailable > bitsRequired {
-			bitsAvailable = bitsRequired
-		}
+		bitsAvailable := min(8-pos, bitsRequired)
 
 		// this is effectively a no-op on the first loop...zero will stay zero.
 		// on subsequent loops, it will shift the value down by the required
@@ -63,10 +60,7 @@ func writeBits(bytes []byte, addr int, value uint64, nBits int) {
 
 	for nBits > 0 {
 
-		bitsToWrite := 8 - pos
-		if bitsToWrite > nBits {
-			bitsToWrite = nBits
-		}
+		bitsToWrite := min(8-pos, nBits)
 
 		mask := byte(1<<uint(bitsToWrite)) - 1
 		partToWrite := mask & byte(value>>uint(nBits-bitsToWrite))
