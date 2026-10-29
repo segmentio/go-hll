@@ -194,7 +194,7 @@ func Test_UpgradePaths(t *testing.T) {
 	// below.  checking the cardinality is important because it ensures that the
 	// conversion was accurate.  however, without using the same seed for every
 	// test, the probabalistic cardinality could vary.
-	rand.Seed(1234567890)
+	rand := rand.New(rand.NewSource(1234567890))
 
 	tests := []struct {
 		label        string
@@ -380,7 +380,7 @@ func Test_MismatchedStorageUnions(t *testing.T) {
 	// below.  checking the cardinality is important because it ensures that the
 	// conversion was accurate.  however, without using the same seed for every
 	// test, the probabalistic cardinality could vary.
-	rand.Seed(1234567890)
+	rand := rand.New(rand.NewSource(1234567890))
 
 	expThresh := 5
 	settings := Settings{
