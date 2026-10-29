@@ -1,11 +1,10 @@
 package hll
 
 import (
+	"errors"
 	"fmt"
 	"math"
 	"sync"
-
-	"github.com/pkg/errors"
 )
 
 const (
